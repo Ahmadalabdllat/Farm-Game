@@ -1,0 +1,21 @@
+name: Godot rebuilt farm check
+
+on:
+  push:
+    branches:
+      - rebuild/farm-world-v1
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.5.1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import and parse project
+        run: godot --headless --editor --quit --path .
+      - name: Start rebuilt scene briefly
+        run: timeout 15s godot --headless --path . --editor --quit-after 5 --main-pack main_rebuilt.tscn || test $? -eq 124
