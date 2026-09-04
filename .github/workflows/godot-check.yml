@@ -17,5 +17,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: Import and parse project
         run: godot --headless --editor --quit --path .
-      - name: Start rebuilt scene briefly
-        run: timeout 15s godot --headless --path . --editor --quit-after 5 --main-pack main_rebuilt.tscn || test $? -eq 124
+      - name: Start rebuilt project briefly
+        run: timeout 15s godot --headless --path . --quit-after 5 || test $? -eq 124
