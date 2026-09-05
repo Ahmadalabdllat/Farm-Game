@@ -1,0 +1,107 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://farm_main.gd" id="1_main"]
+[ext_resource type="Script" path="res://farm_world.gd" id="2_world"]
+[ext_resource type="PackedScene" path="res://farm_map_new.tscn" id="3_map"]
+[ext_resource type="PackedScene" path="res://farm_player.tscn" id="4_player"]
+[ext_resource type="PackedScene" path="res://joystick.tscn" id="5_joy"]
+
+[sub_resource type="StyleBoxFlat" id="top_style"]
+bg_color = Color(0.11, 0.16, 0.11, 0.92)
+corner_radius_bottom_left = 10
+corner_radius_bottom_right = 10
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.55, 0.72, 0.38, 0.8)
+
+[sub_resource type="StyleBoxFlat" id="button_style"]
+bg_color = Color(0.22, 0.39, 0.22, 0.95)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="Farm" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="FarmWorld" type="Node2D" parent="."]
+script = ExtResource("2_world")
+
+[node name="FarmMapNew" parent="." instance=ExtResource("3_map")]
+
+[node name="Player" parent="." instance=ExtResource("4_player")]
+position = Vector2(208, 400)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="TopBar" type="Panel" parent="HUD"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 350.0
+offset_bottom = 66.0
+theme_override_styles/panel = SubResource("top_style")
+
+[node name="Title" type="Label" parent="HUD/TopBar"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 125.0
+offset_bottom = 46.0
+theme_override_colors/font_color = Color(0.88, 0.96, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "MEADOW FARM"
+vertical_alignment = 1
+
+[node name="Money" type="Label" parent="HUD/TopBar"]
+offset_left = 128.0
+offset_top = 8.0
+offset_right = 210.0
+offset_bottom = 46.0
+theme_override_colors/font_color = Color(1, 0.82, 0.36, 1)
+theme_override_font_sizes/font_size = 13
+text = "GOLD  250"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Day" type="Label" parent="HUD/TopBar"]
+offset_left = 208.0
+offset_top = 8.0
+offset_right = 265.0
+offset_bottom = 46.0
+theme_override_colors/font_color = Color(0.76, 0.9, 0.7, 1)
+theme_override_font_sizes/font_size = 12
+text = "DAY  01"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NextDay" type="Button" parent="HUD/TopBar"]
+offset_left = 272.0
+offset_top = 9.0
+offset_right = 332.0
+offset_bottom = 47.0
+theme_override_font_sizes/font_size = 9
+theme_override_styles/normal = SubResource("button_style")
+text = "NEXT DAY"
+
+[node name="Hint" type="Label" parent="HUD"]
+offset_left = 14.0
+offset_top = 610.0
+offset_right = 346.0
+offset_bottom = 632.0
+theme_override_colors/font_color = Color(0.96, 0.96, 0.84, 0.9)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.65)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 8
+text = "TAP A FIELD TILE  •  5 GOLD TO PLANT  •  HARVEST FOR 18"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Joystick" parent="HUD" instance=ExtResource("5_joy")]
+offset_left = 14.0
+offset_top = 492.0
+offset_right = 142.0
+offset_bottom = 620.0

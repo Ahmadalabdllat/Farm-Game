@@ -1,50 +1,47 @@
 extends Control
 
-@onready var base = $Base
-@onready var knob = $Knob
+@onready var base: TextureRect = $Base
+@onready var knob: TextureRect = $Knob
 
-var max_length : float = 40.0
-var touching : bool = false
-var output_vector : Vector2 = Vector2.ZERO
+@export var max_length := 34.0
+var touching := false
+var output_vector := Vector2.ZERO
 
-func _ready():
-	visible = false # إخفاء الجوي ستيك عند بداية اللعبة
+func _ready() -> void:
+	visible = true
+	base.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	knob.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_reset_knob()
 
-func _input(event):
-	# عند لمس الشاشة بقعة جديدة
+func _input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed:
-			touching = true
-			global_position = event.position - (size / 2) # نقل الجوي ستيك لموقع الأصبع
-			visible = true
-			reset_knob()
-		else:
+			if _inside_stick_zone(event.position):
+				touching = true
+				_update_knob(event.position)
+		elif touching:
 			touching = false
-			visible = false
-			reset_knob()
-			
-	# عند السحب على الشاشة
+			_reset_knob()
 	elif event is InputEventScreenDrag and touching:
-		update_knob_position(event.position)
+		_update_knob(event.position)
 
+func _stick_center() -> Vector2:
+	return base.position + (base.size * base.scale) * 0.5
 
-func update_knob_position(touch_pos: Vector2):
-	# مركز الجوي ستيك بالنسبة للشاشة
-	var center = global_position + (base.size * scale / 2)
-	var drag_vector = touch_pos - center
-	
-	# تقييد حركة المقبض بمسافة أقصى
-	if drag_vector.length() > max_length:
-		drag_vector = drag_vector.normalized() * max_length
-		
-	# وضع المقبض في المنتصف + الإزاحة المسحوبة
-	knob.global_position = center + drag_vector - (knob.size * knob.scale / 2)
-	
-	output_vector = drag_vector / max_length
+func _inside_stick_zone(pos: Vector2) -> bool:
+	return pos.distance_to(global_position + _stick_center()) <= 54.0
+
+func _update_knob(touch_pos: Vector2) -> void:
+	var center := _stick_center()
+	var drag := touch_pos - (global_position + center)
+	if drag.length() > max_length:
+		drag = drag.normalized() * max_length
+	knob.position = center + drag - (knob.size * knob.scale) * 0.5
+	output_vector = drag / max_length
 	get_tree().call_group("player", "_on_joystick_vector", output_vector)
 
-func reset_knob():
-	var center = global_position + (base.size * scale / 2)
-	knob.global_position = center - (knob.size * knob.scale / 2)
+func _reset_knob() -> void:
+	var center := _stick_center()
+	knob.position = center - (knob.size * knob.scale) * 0.5
 	output_vector = Vector2.ZERO
 	get_tree().call_group("player", "_on_joystick_vector", Vector2.ZERO)
