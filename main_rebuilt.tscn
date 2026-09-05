@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://farm_main.gd" id="1_main"]
 [ext_resource type="Script" path="res://farm_world.gd" id="2_world"]
-[ext_resource type="PackedScene" path="res://farm_player.tscn" id="3_player"]
-[ext_resource type="PackedScene" path="res://joystick.tscn" id="4_joy"]
+[ext_resource type="PackedScene" path="res://farm_map_new.tscn" id="3_map"]
+[ext_resource type="PackedScene" path="res://farm_player.tscn" id="4_player"]
+[ext_resource type="PackedScene" path="res://joystick.tscn" id="5_joy"]
 
 [sub_resource type="StyleBoxFlat" id="top_style"]
 bg_color = Color(0.11, 0.16, 0.11, 0.92)
@@ -30,8 +31,10 @@ script = ExtResource("1_main")
 [node name="FarmWorld" type="Node2D" parent="."]
 script = ExtResource("2_world")
 
-[node name="Player" parent="." instance=ExtResource("3_player")]
-position = Vector2(190, 370)
+[node name="FarmMapNew" parent="." instance=ExtResource("3_map")]
+
+[node name="Player" parent="." instance=ExtResource("4_player")]
+position = Vector2(208, 400)
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
@@ -93,11 +96,11 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.65)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 8
-text = "TAP A FIELD TILE  •  PLANT 5  •  HARVEST 18"
+text = "TAP A FIELD TILE  •  5 GOLD TO PLANT  •  HARVEST FOR 18"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Joystick" parent="HUD" instance=ExtResource("4_joy")]
+[node name="Joystick" parent="HUD" instance=ExtResource("5_joy")]
 offset_left = 14.0
 offset_top = 492.0
 offset_right = 142.0
