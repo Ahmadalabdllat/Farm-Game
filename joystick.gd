@@ -3,7 +3,7 @@ extends Control
 @onready var base: TextureRect = $Base
 @onready var knob: TextureRect = $Knob
 
-@export var max_length := 38.0
+@export var max_length := 34.0
 var touching := false
 var output_vector := Vector2.ZERO
 
@@ -25,20 +25,23 @@ func _input(event: InputEvent) -> void:
 	elif event is InputEventScreenDrag and touching:
 		_update_knob(event.position)
 
+func _stick_center() -> Vector2:
+	return base.position + (base.size * base.scale) * 0.5
+
 func _inside_stick_zone(pos: Vector2) -> bool:
-	var center := global_position + Vector2(50, 50)
-	return pos.distance_to(center) <= 62.0
+	return pos.distance_to(global_position + _stick_center()) <= 54.0
 
 func _update_knob(touch_pos: Vector2) -> void:
-	var center := global_position + Vector2(50, 50)
-	var drag := touch_pos - center
+	var center := _stick_center()
+	var drag := touch_pos - (global_position + center)
 	if drag.length() > max_length:
 		drag = drag.normalized() * max_length
-	knob.position = Vector2(50, 50) + drag - knob.size * knob.scale / 2.0
+	knob.position = center + drag - (knob.size * knob.scale) * 0.5
 	output_vector = drag / max_length
 	get_tree().call_group("player", "_on_joystick_vector", output_vector)
 
 func _reset_knob() -> void:
-	knob.position = Vector2(50, 50) - knob.size * knob.scale / 2.0
+	var center := _stick_center()
+	knob.position = center - (knob.size * knob.scale) * 0.5
 	output_vector = Vector2.ZERO
 	get_tree().call_group("player", "_on_joystick_vector", Vector2.ZERO)
