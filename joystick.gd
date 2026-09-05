@@ -1,41 +1,44 @@
 extends Control
 
-@onready var base = $Base
-@onready var knob = $Knob
+@onready var base: TextureRect = $Base
+@onready var knob: TextureRect = $Knob
 
-var max_length: float = 40.0
-var touching: bool = false
-var output_vector: Vector2 = Vector2.ZERO
+@export var max_length := 38.0
+var touching := false
+var output_vector := Vector2.ZERO
 
 func _ready() -> void:
 	visible = true
-	reset_knob()
+	base.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	knob.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_reset_knob()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed:
-			var center := global_position + Vector2(45.0, 45.0)
-			if event.position.distance_to(center) <= max_length + 35.0:
+			if _inside_stick_zone(event.position):
 				touching = true
-				update_knob_position(event.position)
-		else:
-			if touching:
-				touching = false
-				reset_knob()
+				_update_knob(event.position)
+		elif touching:
+			touching = false
+			_reset_knob()
 	elif event is InputEventScreenDrag and touching:
-		update_knob_position(event.position)
+		_update_knob(event.position)
 
-func update_knob_position(touch_pos: Vector2) -> void:
-	var center := global_position + Vector2(45.0, 45.0)
-	var drag_vector := touch_pos - center
-	if drag_vector.length() > max_length:
-		drag_vector = drag_vector.normalized() * max_length
-	knob.global_position = center + drag_vector - (knob.size * knob.scale / 2.0)
-	output_vector = drag_vector / max_length
+func _inside_stick_zone(pos: Vector2) -> bool:
+	var center := global_position + Vector2(50, 50)
+	return pos.distance_to(center) <= 62.0
+
+func _update_knob(touch_pos: Vector2) -> void:
+	var center := global_position + Vector2(50, 50)
+	var drag := touch_pos - center
+	if drag.length() > max_length:
+		drag = drag.normalized() * max_length
+	knob.position = Vector2(50, 50) + drag - knob.size * knob.scale / 2.0
+	output_vector = drag / max_length
 	get_tree().call_group("player", "_on_joystick_vector", output_vector)
 
-func reset_knob() -> void:
-	var center := global_position + Vector2(45.0, 45.0)
-	knob.global_position = center - (knob.size * knob.scale / 2.0)
+func _reset_knob() -> void:
+	knob.position = Vector2(50, 50) - knob.size * knob.scale / 2.0
 	output_vector = Vector2.ZERO
 	get_tree().call_group("player", "_on_joystick_vector", Vector2.ZERO)
