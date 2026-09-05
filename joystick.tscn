@@ -1,31 +1,29 @@
 [gd_scene format=3 uid="uid://dbvs5pmqnh34c"]
 
-[ext_resource type="Script" uid="uid://d3cwp00b7v0nk" path="res://joystick.gd" id="1_w25ul"]
-[ext_resource type="Texture2D" uid="uid://dei7e8jejncrn" path="res://VirtualJoystickPack/Joystick.png" id="2_413m4"]
-[ext_resource type="Texture2D" uid="uid://cetdix8depx0u" path="res://VirtualJoystickPack/SmallHandleFilledGrey.png" id="3_413m4"]
+[ext_resource type="Script" uid="uid://d3cwp00b7v0nk" path="res://joystick.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dei7e8jejncrn" path="res://VirtualJoystickPack/Joystick.png" id="2_base"]
+[ext_resource type="Texture2D" uid="uid://cetdix8depx0u" path="res://VirtualJoystickPack/SmallHandleFilledGrey.png" id="3_knob"]
 
 [node name="Joystick" type="Control" unique_id=1510115748]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 3
-anchors_preset = 0
+custom_minimum_size = Vector2(128, 128)
 offset_right = 128.0
 offset_bottom = 128.0
-pivot_offset = Vector2(50, 50)
-script = ExtResource("1_w25ul")
+script = ExtResource("1_script")
 
 [node name="Base" type="TextureRect" parent="." unique_id=2064465923]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 0
-offset_right = 300.0
-offset_bottom = 300.0
-scale = Vector2(0.3, 0.3)
-pivot_offset = Vector2(150, 150)
-texture = ExtResource("2_413m4")
+offset_left = 14.0
+offset_top = 14.0
+offset_right = 314.0
+offset_bottom = 314.0
+scale = Vector2(0.333333, 0.333333)
+texture = ExtResource("2_base")
+expand_mode = 1
+mouse_filter = 2
 
 [node name="Knob" type="TextureRect" parent="." unique_id=853470935]
-layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-scale = Vector2(0.3, 0.3)
-pivot_offset = Vector2(50, 50)
-texture = ExtResource("3_413m4")
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("3_knob")
+expand_mode = 1
+mouse_filter = 2
