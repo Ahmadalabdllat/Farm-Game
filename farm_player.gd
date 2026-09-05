@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 @export var speed := 92.0
-@export var world_bounds := Rect2(58, 44, 294, 560)
+@export var world_bounds := Rect2(20, 44, 312, 552)
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 var joystick_direction := Vector2.ZERO
